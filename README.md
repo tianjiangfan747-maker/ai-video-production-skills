@@ -1,8 +1,8 @@
-# AI 影视创作全流程技能包（Kimi Skills）
+# AI 视频制作
 
-一套覆盖 **AI 广告 / 短视频创作全流程** 的 Kimi 技能（Skill）合集：创意 → 剧本分镜 → 角色/场景/道具资产 → 生成 Prompt → 风格与质感增强 → 成片 QC → 剪辑交付。共 **18 个技能**，配套一套开源 prompt 知识库（自动拉取）。
+小范同学的个人 AI 视频制作辅助 Skill 合集。
 
-已在真实广告项目（北美投放素材）中日常使用。适配 Kimi Work / Kimi Code。
+一套覆盖 **AI 广告 / 短视频创作全流程** 的个人辅助技能包：创意 → 剧本分镜 → 角色/场景/道具资产 → 生成 Prompt → 风格与质感增强 → 成片 QC → 剪辑交付。共 **18 个技能**，配套一套开源 prompt 知识库（自动拉取）。这些是我日常做广告项目时自用的一套辅助工具，分享给有需要的人。适配 Kimi Work / Kimi Code。
 
 ## 技能清单
 
@@ -65,5 +65,5 @@ python scripts/fetch-third-party.py   # 拉取第三方 prompt 知识库（MIT�
 
 ## 版权说明
 
-- A 组 11 个技能（`creative-campaign-director`、`film-director-orchestrator`、`storyboard-director`、`character-asset`、`scene-asset`、`prop-asset`、`style-quality-boost`、`shot-execution`、`image-control-pass`、`video-production-qc`、`edit-assembly`）为仓库作者自建，可自由使用、修改、再分发。
+- A 组 11 个技能（`creative-campaign-director`、`film-director-orchestrator`、`storyboard-director`、`character-asset`、`scene-asset`、`prop-asset`、`style-quality-boost`、`shot-execution`、`image-control-pass`、`video-production-qc`、`edit-assembly`）为个人自建，可自由使用、修改、再分发。
 - B 组 7 个技能及 `_shared/lanshu-kit/` 知识库改写自开源项目 [cclank/lanshu-awesome-ai-video-kit](https://github.com/cclank/lanshu-awesome-ai-video-kit)，**MIT License**（`fetch-third-party.py` 拉取后见 `skills/_shared/lanshu-kit/LICENSE`），按许可证保留版权声明即可自由使用。
