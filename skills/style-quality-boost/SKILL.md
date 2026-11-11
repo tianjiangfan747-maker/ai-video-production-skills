@@ -26,8 +26,12 @@ description: 广告/短视频视觉的"质感提升"与"风格化"增强技能�
 | 调色 | teal and orange grade, Kodak Portra 400 film look, high contrast cinematic LUT, subtle film grain | 青橙调 / 胶片感 / 高对比电影 LUT / 颗粒 |
 | 运动 | 120fps slow motion, speed ramping, whip pan transition, macro probe lens shot | 升格 / 变速 / 甩镜 / 探针微距 |
 
-### 3. 反面词（必须避免的画面特征）
-flat lighting, washed out colors, plastic skin, stock photo look, cluttered background, jittery camera, low resolution texture, overexposed highlights
+### 3. 风险词（仅诊断命中时使用）
+以下是需要观察的风险，不是每条 Prompt 都要复制的反面词尾巴：
+
+`flat lighting / washed out colors / plastic skin / stock photo look / cluttered background / jittery camera / low resolution texture / overexposed highlights`
+
+优先用正向设计解决，例如用“左侧柔光照亮面部，右侧保留柔和阴影”代替“不要平光、不要塑料感”。用户明确排除或该问题反复出现时，才保留一条针对性限制；已由参考图或正面描述覆盖的内容不再重复。输出前按 `shot-execution` 的语义审查压缩。
 
 ## 二、风格化（Stylization）
 
@@ -67,20 +71,32 @@ flat lighting, washed out colors, plastic skin, stock photo look, cluttered back
 - 关键词：`mixed media animation, doodle overlays on live action, hand-drawn scribble effects, paper collage texture, stop-motion feel`
 
 ### 2. 风格化执行规则
-1. 写 prompt 时**风格词前置**（模型对前 1/3 权重更高）
-2. 同一个角色跨镜头时，把角色锚点公式**逐字复制**到每个镜头 prompt，只改动作和机位
-3. 花字/字幕样式也要服从风格（多巴胺=粗体圆体字+撞色描边；极简=细体无衬线+大量留白）
-4. 出片后对照风格词板逐条 QC
+1. 把选定的风格方向表达清楚，风格词的位置按模型实测调整，不假定“前 1/3 永远权重更高”。
+2. 跨镜头复用同一份风格合同与身份资产。强参考图已锁定角色时，不在每条视频 Prompt 逐字重复角色描述；身份漂移时回到 `image-control-pass` 补 Identity 控制。
+3. 花字/字幕样式也要服从风格（多巴胺=粗体圆体字+撞色描边；极简=细体无衬线+大量留白）；用户不需要花字/字幕时不额外设计。
+4. 出片后对照风格合同检查关键差异，不机械堆叠词板。
+
+### 3. 按需光影方法
+
+画面平、主体不突出或需要光影叙事时，按 `光源位置 → 方向 → 软硬/色温 → 亮暗比 → 遮挡/投影 → 材质响应` 补齐缺失项。窗光、门缝光、灯光、反射光等必须有可理解的空间来源；动态扫光、影子移动要由主体或光源运动触发。
+
+跨镜头记录主光方向和允许的变化，不为“电影感”给每镜强加逆光、体积光或高反差。具体资产交接见 `image-control-pass/references/midjourney-style-assets.md`。
+
+### 4. MJ 风格资产协作（可选）
+
+需要探索更鲜明的风格或建立风格化资产时，先经 `image-control-pass` 使用 Midjourney 产出 Style Master 与风格合同，再进入角色、场景、关键帧控制。MJ 负责风格探索，不替代身份或空间锁定；参数按当前官方支持配置，不写死版本。
 
 ## 三、QC 检查表（成片验收用）
-- [ ] 光线有方向、有层次，不是大平光
-- [ ] 主体材质细节可见（皮肤/食物/面料/金属）
-- [ ] 景深关系正确：主体实、背景虚化
-- [ ] 配色符合风格锚点，无脏色、无偏色
+- [ ] 光影方向与来源符合场景，亮暗层次服务主体；不是每镜都必须高反差
+- [ ] 本镜需要呈现的主体材质细节可见（皮肤/食物/面料/金属）
+- [ ] 景深与空间关系符合镜头目的；需要环境叙事时不强制背景虚化
+- [ ] 配色符合风格锚点，不出现破坏风格的偏色
 - [ ] 角色跨镜头不漂移（发型/服装/妆容一致）
 - [ ] 有至少一个"记忆点画面"（可截图当封面的帧）
+- [ ] 视频 Prompt 未重复资产描述、通用质量后缀和无效否定
 
 ## 四、与其他 skill 的协作
 - 角色一致性 → 配合 `character-asset`
-- 单镜头执行 prompt → 配合 `shot-execution`（把本技能的词库注入其模板）
+- 风格母版 / MJ 探索 → 配合 `image-control-pass`
+- 单镜头执行 prompt → 配合 `shot-execution`（只注入本镜需要且未被参考图覆盖的风格/光影信息）
 - 成片验收 → 配合 `video-production-qc`（本清单并入其质感维度）

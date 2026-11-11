@@ -33,6 +33,10 @@ whenToUse: 当用户问这场戏怎么拍、做分镜/镜头表/预演、人物�
 
 `shot_id / purpose / duration / size / lens_feel / camera / blocking / action_start / action_end / character_state / eyeline / continuity_in / continuity_out / keyframe / control_reference / risk / fallback`
 
+需要“镜头包裹动作”、空间揭示或特殊光影时，按镜头补充：`foreground_midground_background / occlusion_reveal / light_source_direction / light_continuity`。这些不是每镜必填的新表单；无信息增量就省略。
+
+包裹动作在镜头卡中写成：`起始构图 → 主动作/触发 → 摄影机路径 → 遮挡或层次变化 → 结束构图`。摄影机与主体调度只保留一个主要行为；前中后景、遮挡和光影必须对叙事或空间可读性有贡献。进入 `shot-execution` 后压缩成简洁 Prompt，不把字段名逐项翻译堆入正文。
+
 ## 6. Handoff Matrix
 
 相邻镜头至少交接一种：动作、视线、屏幕方向、进出画、前景遮挡、构图形状、道具状态、空间入口、光线或声音。

@@ -60,8 +60,22 @@ python scripts/fetch-third-party.py   # 拉取第三方 prompt 知识库（MIT�
 - "给这个角色建参考板，后面镜头不能变脸" → character-asset
 - "这个镜头帮我写成即梦能用的 prompt" → shot-execution + seedance-prompter
 - "这条视频画面太平了，提升质感、做得更风格化" → style-quality-boost
+- "先用 MJ 探索风格母版，再交给角色/场景资产" → image-control-pass
+- "让镜头跟随动作，经过前景遮挡后露出主体" → storyboard-director + shot-execution
+- "检查这条提示词，保留必要限制但删掉重复和无效否定" → shot-execution
 - "生成的视频脸变了/接不上，帮我诊断" → video-production-qc / seedance-debugger
 - "把这些片段剪成连贯短片" → edit-assembly
+
+## 提示词冗余审查
+
+在合集根目录运行：
+
+```bash
+python scripts/review_prompt.py prompt.txt --json
+python scripts/test_review_prompt.py
+```
+
+脚本只提示否定词密度、重复语句、竞争运镜和质量标签堆叠，不自动改写。最终必须结合用户明确要求、参考图覆盖关系和镜头结束态进行语义审查；不要机械卡字数。
 
 ## 版权说明
 

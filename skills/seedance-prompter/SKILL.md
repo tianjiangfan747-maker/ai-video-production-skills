@@ -39,32 +39,33 @@ description: 把用户的自然语言视频需求转换为符合 Doubao Seedance
 
 **例外**：如果用户说"随便""快"或给了参考图，直接生成一版给他改。
 
-### 步骤 2：按 8 要素填充
+### 步骤 2：按需编译，而非填满 8 个字段
 
-写英文（Seedance 对英文响应更好），但用户的核心元素用原文保留（人物名字、品牌名、专有名词）。
+写英文（Seedance 对英文响应更好），但用户的核心元素用原文保留（人物名字、品牌名、专有名词）。8 要素是**内部检查维度**，不是要求每项都出现在最终 Prompt。
 
-**模板骨架**：
+**按需选择的信息顺序**：
 
 ```
-[Subject with 2-3 stable identifying features].
-[Action with specific body parts + speed/intensity].
-[Scene/environment].
-[Light source + time of day + color tone].
-[Camera size + movement + angle].
-[Visual style + film grain/aesthetic anchor].
-[Quality: cinematic / 4K / photorealistic].
-[Negative: avoid ...; no watermark; no logo; preserve face stability].
+[仅参考图未提供的主体特征] + [主动作/速度/方向]
++ [必要环境] + [有叙事作用的光影]
++ [一个主要摄影机路径] + [必要风格锚点]
++ [结束构图] + [必要且未覆盖的限制]
 ```
 
-### 步骤 3：检查避免错误
+需要镜头包裹动作时，写为：`start framing → action trigger → camera path → foreground occlusion/reveal → end framing`。摄影机与主体只保留一条可读的运动链，避免同时推、拉、摇、环绕。
+
+### 步骤 3：语义审查与错误检查
 
 提交前自查：
 
-- [ ] 提示词 50-200 词之间？
-- [ ] 一个镜头只指定 1 种运镜方式（不要同时推+拉+摇）？
-- [ ] 没有矛盾词（如 `8mm` + `4K`、`slow motion` + `high speed`）？
-- [ ] 有约束条件（至少 `no watermark, no logo`）？
+- [ ] 动作、方向、主摄影机、节奏触发和结束态是否明确？
+- [ ] 是否重复描述参考图已确定的身份、服装、构图或材质？
+- [ ] 是否堆叠同义形容词、质量后缀或多个竞争运镜？
+- [ ] 是否存在矛盾（如 `8mm` + `4K`、`slow motion` + `high speed`）？
+- [ ] 限制词是否必要且未被正面语义覆盖？用户明确的无字幕/BGM/乱码等要求保留，但不默认添加 `no watermark, no logo`。
 - [ ] 多主体场景已用标签区分（"警察"/"小偷"）？
+
+不以机械字数判定好坏。合集根目录的 `scripts/review_prompt.py` 只做冗余提醒，不能自动删除用户明确约束；最终由语义审查决定。
 
 ### 步骤 4：输出格式
 
@@ -96,27 +97,22 @@ description: 把用户的自然语言视频需求转换为符合 Doubao Seedance
 **输出**：
 
 ```
-Extreme close-up of rich cream being poured into a freshly brewed dark espresso in slow motion, creating a mesmerizing vortex pattern across the crema surface. Wisps of steam rise softly from the cup. Warm tungsten side-light highlights the contrast between cream and coffee, casting soft amber reflections on the ceramic edge. The camera slowly pulls back from macro to medium shot, revealing a styled wooden café table with a sprig of cinnamon and a folded linen napkin. Commercial quality, appetizing warm color grading, 4K, shallow depth of field, photorealistic liquid dynamics. No text overlays, no watermark, no logo.
+Extreme close-up: cream spirals into espresso as steam rises. Warm side-light from the left catches the crema and ceramic edge. The camera slowly pulls back to reveal the wooden table, then stops as the pour ends. No subtitles.
 ```
 
 **推荐参数**：9:16 · 8 秒 · 1080p
-**关键技巧**：单镜头单运镜（仅 pull back），用极特写 → 中景的尺度变化制造戏剧性，slow motion + 温暖色调强化食欲。
-**可调点**：把 `tungsten side-light` 换成 `morning window light` 可改成晨间感；加 `with pour sound audible` 提示音频路径（注意：Seedance 2.0 需独立处理音频）。
+**关键技巧**：一个 pull back 串联咖啡旋涡与桌面揭示，最后以“倒奶结束、镜头停下”锁定结束态；暖侧光同时交代来源、方向和材质响应。
+**可调点**：把 `Warm side-light from the left` 换成 `soft morning window light from the left` 可改成晨间感。若用户明确要求无 BGM，可补 `No BGM`；若已提供构图参考图，则删去重复的静态环境描述。
 
 ## 参考资源
 
 - 进阶公式：[methodology/02-进阶公式.md](../_shared/lanshu-kit/methodology/02-进阶公式.md)
 - **Masterclass(10 YouTube 教学综合)**：[methodology/15-seedance-masterclass.md](../_shared/lanshu-kit/methodology/15-seedance-masterclass.md) ⭐ 9 要素公式 / Timeline Prompting / 5 种爆款 / VFX 技巧 / 8 个模板
 - 运镜词典：[methodology/05-运镜词典.md](../_shared/lanshu-kit/methodology/05-运镜词典.md)
-- 约束词清单：[methodology/06-约束词清单.md](../_shared/lanshu-kit/methodology/06-约束词清单.md)
+- 约束词清单：[methodology/06-约束词清单.md](../_shared/lanshu-kit/methodology/06-约束词清单.md)：按任务选用，不整表附加
 - 117 条实测提示词：[prompts/seedance/README.md](../_shared/lanshu-kit/prompts/seedance/README.md)
+- 平台中性镜头压缩：`../shot-execution/SKILL.md`
 
-## 质量后缀(每条 prompt 都加)
+## 质量与限制信息（按需）
 
-> 来源:[Masterclass §1](../_shared/lanshu-kit/methodology/15-seedance-masterclass.md) — *The ULTIMATE Seedance 2.0 Prompting Guide*
-
-```
-4K, ultra HD, rich detail, sharp clarity, cinematic textures, stable picture.
-Maintaining face and clothing consistency without distortion or high detail.
-Generate the video without subtitles.
-```
+画质、材质、身份稳定性或排除项只在用户要求、参考图未覆盖、或已有失败证据时补写。不要默认追加 `4K, ultra HD, rich detail, sharp clarity` 等质量后缀，也不要把 `no watermark, no logo` 当作固定结尾。最终只保留有独立作用的信息。
